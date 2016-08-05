@@ -1347,6 +1347,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _numberOfVisibleItems = 0;
     _numberOfItems = [_dataSource numberOfItemsInCarousel:self];
     _numberOfPlaceholders = [_dataSource numberOfPlaceholdersInCarousel:self];
+    if ([_dataSource respondsToSelector:@selector(itemIndexOfBoundaryItemInCarousel:)]) {
+        _itemIndexOfBoundaryItem = [_dataSource itemIndexOfBoundaryItemInCarousel:self];
+    }
+    else {
+        _itemIndexOfBoundaryItem = _numberOfItems;
+    }
 
     //reset view pools
     self.itemViews = [NSMutableDictionary dictionary];
@@ -1785,15 +1791,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             [self popAnimationState];
             if ((_scrollToItemBoundary || fabs(_scrollOffset - [self clampedOffset:_scrollOffset]) > FLOAT_ERROR_MARGIN) && !_autoscroll)
             {
-                if (fabs(_scrollOffset - self.currentItemIndex) < FLOAT_ERROR_MARGIN)
+                NSInteger index = self.currentItemIndex;
+                if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem > 0) {
+                    index = self.itemIndexOfBoundaryItem;
+                }
+                if (fabs(_scrollOffset - index) < FLOAT_ERROR_MARGIN)
                 {
                     //call scroll to trigger events for legacy support reasons
                     //even though technically we don't need to scroll at all
-                    [self scrollToItemAtIndex:self.currentItemIndex duration:0.01];
+                    [self scrollToItemAtIndex:index duration:0.01];
                 }
                 else
                 {
-                    [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+                    [self scrollToItemAtIndex:index animated:YES];
                 }
             }
             else
@@ -2082,7 +2092,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else 
     {
-    	[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+        [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
     }
 }
 
@@ -2127,20 +2137,25 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 {
                     if ((_scrollToItemBoundary || fabs(_scrollOffset - [self clampedOffset:_scrollOffset]) > FLOAT_ERROR_MARGIN) && !_autoscroll)
                     {
-                        if (fabs(_scrollOffset - self.currentItemIndex) < FLOAT_ERROR_MARGIN)
+                        NSInteger index = self.currentItemIndex;
+                        if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem > 0) {
+                            index = self.itemIndexOfBoundaryItem;
+                        }
+                        
+                        if (fabs(_scrollOffset - index) < FLOAT_ERROR_MARGIN)
                         {
                             //call scroll to trigger events for legacy support reasons
                             //even though technically we don't need to scroll at all
-                            [self scrollToItemAtIndex:self.currentItemIndex duration:0.01];
+                            [self scrollToItemAtIndex:index duration:0.01];
                         }
                         else if ([self shouldScroll])
                         {
                             NSInteger direction = (int)(_startVelocity / fabs(_startVelocity));
-                            [self scrollToItemAtIndex:self.currentItemIndex + direction animated:YES];
+                            [self scrollToItemAtIndex:index + direction animated:YES];
                         }
                         else
                         {
-                            [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+                            [self scrollToItemAtIndex:index animated:YES];
                         }
                     }
                     else

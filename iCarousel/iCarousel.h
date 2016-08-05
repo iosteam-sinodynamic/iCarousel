@@ -125,6 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGSize viewpointOffset;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
+@property (nonatomic, readonly) NSInteger itemIndexOfBoundaryItem;
 @property (nonatomic, assign) NSInteger currentItemIndex;
 @property (nonatomic, strong, readonly) UIView * __nullable currentItemView;
 @property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
@@ -172,7 +173,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(nullable UIView *)view;
-
+- (NSInteger)itemIndexOfBoundaryItemInCarousel:(iCarousel *)carousel;
 @end
 
 
