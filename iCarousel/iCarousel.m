@@ -1792,7 +1792,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             if ((_scrollToItemBoundary || fabs(_scrollOffset - [self clampedOffset:_scrollOffset]) > FLOAT_ERROR_MARGIN) && !_autoscroll)
             {
                 NSInteger index = self.currentItemIndex;
-                if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem > 0) {
+                if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem >= 0) {
                     index = self.itemIndexOfBoundaryItem;
                 }
                 if (fabs(_scrollOffset - index) < FLOAT_ERROR_MARGIN)
@@ -2138,7 +2138,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                     if ((_scrollToItemBoundary || fabs(_scrollOffset - [self clampedOffset:_scrollOffset]) > FLOAT_ERROR_MARGIN) && !_autoscroll)
                     {
                         NSInteger index = self.currentItemIndex;
-                        if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem > 0) {
+                        if (index > self.itemIndexOfBoundaryItem && self.itemIndexOfBoundaryItem >= 0) {
                             index = self.itemIndexOfBoundaryItem;
                         }
                         
